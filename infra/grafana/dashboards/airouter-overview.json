@@ -1,0 +1,97 @@
+{
+  "dashboard": {
+    "title": "AIRouter Overview",
+    "tags": ["airouter", "overview"],
+    "timezone": "browser",
+    "panels": [
+      {
+        "title": "Request Rate",
+        "type": "graph",
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0},
+        "targets": [
+          {
+            "expr": "rate(http_requests_total[5m])",
+            "legendFormat": "{{method}} {{route}} - {{status_code}}"
+          }
+        ]
+      },
+      {
+        "title": "Response Time (p95)",
+        "type": "graph",
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 0},
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m]))",
+            "legendFormat": "p95 - {{route}}"
+          }
+        ]
+      },
+      {
+        "title": "LLM Requests by Provider",
+        "type": "graph",
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8},
+        "targets": [
+          {
+            "expr": "rate(llm_requests_total[5m])",
+            "legendFormat": "{{provider}} - {{model}}"
+          }
+        ]
+      },
+      {
+        "title": "LLM Cost Rate",
+        "type": "graph",
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 8},
+        "targets": [
+          {
+            "expr": "rate(llm_cost_total[5m])",
+            "legendFormat": "{{provider}} - {{model}}"
+          }
+        ]
+      },
+      {
+        "title": "Cache Hit Rate",
+        "type": "stat",
+        "gridPos": {"h": 4, "w": 6, "x": 0, "y": 16},
+        "targets": [
+          {
+            "expr": "rate(cache_hits_total[5m]) / (rate(cache_hits_total[5m]) + rate(cache_misses_total[5m])) * 100"
+          }
+        ]
+      },
+      {
+        "title": "Active Users",
+        "type": "stat",
+        "gridPos": {"h": 4, "w": 6, "x": 6, "y": 16},
+        "targets": [
+          {
+            "expr": "active_users"
+          }
+        ]
+      },
+      {
+        "title": "Database Health",
+        "type": "stat",
+        "gridPos": {"h": 4, "w": 6, "x": 12, "y": 16},
+        "targets": [
+          {
+            "expr": "health_status{component=\"database\"}"
+          }
+        ]
+      },
+      {
+        "title": "Redis Health",
+        "type": "stat",
+        "gridPos": {"h": 4, "w": 6, "x": 18, "y": 16},
+        "targets": [
+          {
+            "expr": "health_status{component=\"redis\"}"
+          }
+        ]
+      }
+    ],
+    "refresh": "30s",
+    "schemaVersion": 27,
+    "version": 1
+  }
+}
+
